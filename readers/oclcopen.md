@@ -13,6 +13,6 @@ OCLC OPEN "OPAC Portal" on DotNetNuke.
 
 ## Tested (1 Nov 2026)
 
-Plan plus first page worked for Bad Dürkheim, Celle, Geldern, Gescher, Hachenburg, Heidelberg, Lahnstein, Lehrte, Münster Überwasser, Oranienburg, Rendsburg, Rüsselsheim and Wittenberg.
+Plan plus first page worked for Bad Dürkheim, Celle, Geldern, Gescher, Hachenburg, Heidelberg, Lahnstein, Lehrte, Münster Überwasser, Oranienburg, Remscheid, Rendsburg, Rüsselsheim, Wiesbaden and Wittenberg.
 
 Essen fails: its advanced search has no media group menu at the three known paths.
