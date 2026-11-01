@@ -48,6 +48,14 @@ test("same-title films are ambiguous despite a large vote difference", () => {
   assert.equal(result?.match, "low");
 });
 
+test("short titles remain ambiguous even against a low-vote rival", () => {
+  const result = fixture({ title: "Michael", disc: 2026 }, [
+    { id: "ttFamous", title: "Michael", year: 2024, votes: 200000 },
+    { id: "ttSmall", title: "Michael", year: 2025, votes: 8 }
+  ]);
+  assert.equal(result?.match, "low");
+});
+
 test("movie and TV series with the same title stay uncertain", () => {
   const result = fixture({ title: "Outlander", disc: 2018 }, [
     { id: "ttMovie", title: "Outlander", year: 2008, votes: 70000 },
