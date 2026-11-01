@@ -40,20 +40,21 @@ test("an unrelated international alternative is not strong evidence", () => {
   assert.equal(result?.match, "low");
 });
 
-test("same-title films are ambiguous despite a large vote difference", () => {
+test("a release close to the disc year beats an old film of the same name", () => {
   const result = fixture({ title: "Michael", disc: 2026 }, [
     { id: "ttOld", title: "Michael", year: 1996, votes: 90000 },
     { id: "ttNew", title: "Michael", year: 2025, votes: 1200 }
   ]);
-  assert.equal(result?.match, "low");
+  assert.equal(result?.film.id, "ttNew");
+  assert.equal(result?.match, "high");
 });
 
-test("short titles remain ambiguous even against a low-vote rival", () => {
+test("a rival with almost no votes does not make a match doubtful", () => {
   const result = fixture({ title: "Michael", disc: 2026 }, [
     { id: "ttFamous", title: "Michael", year: 2024, votes: 200000 },
     { id: "ttSmall", title: "Michael", year: 2025, votes: 8 }
   ]);
-  assert.equal(result?.match, "low");
+  assert.equal(result?.match, "high");
 });
 
 test("movie and TV series with the same title stay uncertain", () => {
