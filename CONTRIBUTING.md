@@ -1,5 +1,7 @@
 # Contributing
 
+Using a coding agent? Point it at [AGENTS.md](AGENTS.md).
+
 ## Add a library
 
 Run `detect` with your catalog link, add the printed line to `libraries.json` and open a pull request.
