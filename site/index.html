@@ -1,4 +1,14 @@
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Library Shelves</title>
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Library Shelves: Filme und Spiele deutscher Büchereien</title>
+<!--BASE-->
+<meta name="description" content="Finde Filme und Konsolenspiele in deutschen Stadtbüchereien, mit Bewertungen, Genres und Verfügbarkeit. Kostenlos und ohne Anmeldung.">
+<link rel="canonical" href="https://nikpottbecker.github.io/library-shelves/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Library Shelves">
+<meta property="og:locale" content="de_DE">
+<meta property="og:title" content="Library Shelves: Filme und Spiele deutscher Büchereien">
+<meta property="og:description" content="Filme und Konsolenspiele aus deutschen Büchereien auf einem Regal, mit Bewertungen und Verfügbarkeit.">
+<meta property="og:url" content="https://nikpottbecker.github.io/library-shelves/">
+<!--LD-->
 <style>
 /* Layout: ein Regal aus Hüllen. Links das Cover, unten die Signatur wie auf einem Bibliotheksetikett. */
 :root {
@@ -84,14 +94,15 @@ footer a { color: var(--accent); }
   </div>
   <div class="count" id="count" aria-live="polite"></div>
   <main class="shelf" id="shelf"></main>
+  <!--TITLES-->
   <button class="more" id="more" hidden>Mehr anzeigen</button>
   <footer>
-        <div class="data"><h2>Stand der Daten</h2><p id="stand"></p><p><a id="catalog" href="#">Zum Katalog der Bücherei</a></p><p>Freies Projekt, kein Angebot der Bücherei. <a href="https://github.com/nikpottbecker/library-shelves">Deine Bücherei ergänzen</a></p></div>
+        <div class="data"><h2>Stand der Daten</h2><p id="stand"></p><p><a id="catalog" href="#">Zum Katalog der Bücherei</a></p><p>Freies Projekt, kein Angebot der Bücherei. <a href="https://github.com/nikpottbecker/library-shelves#mitmachen">Deine Bücherei ergänzen</a></p></div>
     <div><h2>Rechtliches</h2><p><a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a></p><p>Information courtesy of IMDb (https://www.imdb.com). Used with permission. This product uses the TMDB API but is not endorsed or certified by TMDB.</p></div>
   </footer>
 </div>
 <script>
-const lib = new URLSearchParams(location.search).get("lib");
+const lib = window.LIB || new URLSearchParams(location.search).get("lib");
 let DATA, CAT = "";
 const TABS = [["d", "DVD"], ["b", "Blu-ray"], ["g", "Spiele"], ["fav", "Merkliste"]];
 const PAGE = 60;
@@ -175,7 +186,7 @@ async function start() {
     const show = () => {
       const q = $("q").value.trim().toLowerCase();
       $("shelf").replaceChildren(...all.filter(l => (l.name + " " + l.town).toLowerCase().includes(q)).map(l => {
-        const a = document.createElement("a"); a.href = "?lib=" + encodeURIComponent(l.id); a.className = "lib";
+        const a = document.createElement("a"); a.href = l.slug ? `buecherei/${l.slug}/` : "?lib=" + encodeURIComponent(l.id); a.className = "lib";
         const n = document.createElement("span"); n.className = "t"; n.textContent = l.name;
         const c = document.createElement("span"); c.className = "m"; c.textContent = `${l.total.toLocaleString("de-DE")} Titel`;
         a.append(n, c); return a;

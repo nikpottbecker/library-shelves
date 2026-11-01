@@ -1,8 +1,39 @@
 # Library Shelves
 
-Filme und Spiele öffentlicher Büchereien auf einem durchsuchbaren Regal, inspiriert von [Nomad Library](https://library.nomadovernormal.com). Nomad liest vor allem US-Kataloge. Dieses Projekt ergänzt Kataloge, die dort fehlen, zum Beispiel OCLC OPEN aus dem deutschsprachigen Raum. Es ist kein Projekt von Nomad Library und keiner Bücherei.
+**Filme und Konsolenspiele deutscher Büchereien auf einem Regal.**
+Durchsuche DVDs, Blu-rays und Spiele deiner Stadtbücherei mit Bewertungen, Genres und Verfügbarkeit. Kostenlos, ohne Konto und ohne Tracking.
 
-**Website:** https://nikpottbecker.github.io/library-shelves/
+**[Zur Website](https://nikpottbecker.github.io/library-shelves/)** · [Bücherei vorschlagen](https://github.com/nikpottbecker/library-shelves/issues/new?template=library.yml) · [Mitmachen](#mitmachen)
+
+[![Check](https://github.com/nikpottbecker/library-shelves/actions/workflows/ci.yml/badge.svg)](https://github.com/nikpottbecker/library-shelves/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+## Warum?
+
+Bücherei-Kataloge sind zum Suchen gebaut, nicht zum Stöbern. Hier siehst du den Filmbestand deiner Bücherei wie in einem Streamingdienst: sortiert nach Bewertung, gefiltert nach Genre und mit einem Klick zum Katalog.
+
+- Suche nach Titel oder Reihe
+- Filter nach Genre und „nur verfügbar“
+- Bewertungen von IMDb und Poster von TMDB
+- Merkliste, die nur in deinem Browser liegt
+- Direkter Link zum Titel im Katalog der Bücherei
+
+## Dabei sind
+
+Bad Dürkheim · Celle · Geldern · Gescher · Hachenburg · Heidelberg · Lahnstein · Lehrte · Münster (Liebfrauen-Überwasser) · Oranienburg · Rendsburg · Rüsselsheim · Wittenberg
+
+Deine Stadt fehlt? [Schlag sie vor](https://github.com/nikpottbecker/library-shelves/issues/new?template=library.yml).
+
+## Mitmachen
+
+| Du möchtest | So geht's |
+|---|---|
+| Eine Bücherei melden | [Issue öffnen](https://github.com/nikpottbecker/library-shelves/issues/new?template=library.yml) |
+| Eine Bücherei eintragen | `node tools/detect.mjs <Katalog-Link>` ausführen und die Zeile in `libraries.json` ergänzen |
+| Ein neues Katalogsystem anbinden | Reader schreiben, siehe [CONTRIBUTING.md](CONTRIBUTING.md) |
+| Einen Coding-Agenten einsetzen | [AGENTS.md](AGENTS.md) zeigen |
+
+Unterstützt wird bisher OCLC OPEN (BIBLIOTHECA OPEN). Reader für BIBDIA, LITTERA, aDIS und andere Systeme sind willkommen.
 
 ## So funktioniert es
 
@@ -10,16 +41,16 @@ Filme und Spiele öffentlicher Büchereien auf einem durchsuchbaren Regal, inspi
 2. `libraries.json` listet die Büchereien.
 3. GitHub Actions liest sie alle drei Tage mit einer Anfrage pro Sekunde und veröffentlicht das Regal.
 
-Fällt eine Bücherei aus, bleibt ihr letzter Stand online.
+Fällt eine Bücherei aus, bleibt ihr letzter Stand online. Verbindlich ist immer der Katalog der Bücherei.
+
+## Inspiration und Daten
+
+Inspiriert von [Nomad Library](https://library.nomadovernormal.com), aber kein Projekt von Nomad Library und keiner Bücherei.
 
 Bewertungen und Genres stammen aus den [nicht kommerziellen IMDb-Datensätzen](https://developer.imdb.com/non-commercial-datasets/). Information courtesy of IMDb (https://www.imdb.com). Used with permission. Poster von [TMDB](https://www.themoviedb.org). This product uses the TMDB API but is not endorsed or certified by TMDB.
 
-## Mitmachen
-
-- **Nur Bücherei melden:** [Issue öffnen](https://github.com/nikpottbecker/library-shelves/issues/new?template=library.yml).
-- **System schon vorhanden:** `node tools/detect.mjs <Katalog-Link>` ausführen, die Zeile in `libraries.json` eintragen und Pull Request öffnen.
-- **Neues System:** siehe [CONTRIBUTING.md](CONTRIBUTING.md).
+Der Code steht unter der [MIT-Lizenz](LICENSE).
 
 ---
 
-**English:** A shelf of the films and games at public libraries, for catalogs that Nomad Library does not read yet. Add your library to `libraries.json`, or write a reader for its catalog system. See [CONTRIBUTING.md](CONTRIBUTING.md).
+**English:** Browse the films and console games at German public libraries on one shelf, with ratings, genres and availability. To add a library or a catalog system, see [CONTRIBUTING.md](CONTRIBUTING.md).
