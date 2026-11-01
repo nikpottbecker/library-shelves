@@ -106,6 +106,9 @@ const lib = window.LIB || new URLSearchParams(location.search).get("lib");
 let DATA, CAT = "";
 const TABS = [["d", "DVD"], ["b", "Blu-ray"], ["g", "Spiele"], ["fav", "Merkliste"]];
 const PAGE = 60;
+const M = 5000, C = 6.5;
+const trusted = x => x.match === "high" && x.rating > 0 && x.votes > 0;
+const score = x => trusted(x) ? (x.votes / (x.votes + M)) * x.rating + (M / (x.votes + M)) * C : -1;
 const GENRES = { Action: "Action", Adventure: "Abenteuer", Animation: "Animation", Biography: "Biografie", Comedy: "Komödie", Crime: "Krimi", Documentary: "Doku", Drama: "Drama", Family: "Familie", Fantasy: "Fantasy", History: "Historie", Horror: "Horror", Music: "Musik", Musical: "Musical", Mystery: "Mystery", Romance: "Liebesfilm", "Sci-Fi": "Science-Fiction", Sport: "Sport", Thriller: "Thriller", War: "Krieg", Western: "Western" };
 const $ = id => document.getElementById(id);
 const key = "fav:" + (lib || "");
@@ -120,7 +123,7 @@ function list() {
   const r = DATA.items.filter(x => (tab === "fav" ? favs.has(x.id) : x.f === tab)
     && (!genre || x.genres?.includes(genre)) && (!only || x.avail) && (!q || (x.title + " " + (x.sub || "")).toLowerCase().includes(q)));
   const by = {
-    top: (a, b) => (b.rating || 0) - (a.rating || 0) || (b.votes || 0) - (a.votes || 0),
+    top: (a, b) => score(b) - score(a) || (trusted(b) ? b.votes : 0) - (trusted(a) ? a.votes : 0) || a.title.localeCompare(b.title, "de"),
     new: (a, b) => b.id.localeCompare(a.id),
     az: (a, b) => a.title.localeCompare(b.title, "de"),
     yd: (a, b) => (b.disc || 0) - (a.disc || 0),
@@ -142,7 +145,7 @@ function card(x) {
     i.onerror = () => { i.remove(); name.remove(); };
     cover.append(i);
   }
-  if (x.rating) { const r = document.createElement("span"); r.className = "rate"; r.textContent = "★ " + x.rating.toFixed(1).replace(".", ","); cover.append(r); }
+  if (trusted(x)) { const r = document.createElement("span"); r.className = "rate"; r.textContent = "★ " + x.rating.toFixed(1).replace(".", ","); cover.append(r); }
   if (x.avail === 0) { const s = document.createElement("span"); s.className = "stamp"; s.textContent = "ENTLIEHEN"; cover.append(s); }
   const f = document.createElement("button");
   f.className = "fav"; f.textContent = "♥"; f.setAttribute("aria-pressed", favs.has(x.id));
@@ -153,7 +156,7 @@ function card(x) {
   const m = document.createElement("div"); m.className = "m";
   m.textContent = [x.year || x.disc, x.plat, ...(x.genres || []).slice(0, 2).map(g => GENRES[g] || g)].filter(Boolean).join(" · ");
   const links = document.createElement("div"); links.className = "links";
-  if (x.imdb) links.append(link("IMDb", "https://www.imdb.com/title/" + x.imdb + "/"));
+  if (trusted(x) && x.imdb) links.append(link("IMDb", "https://www.imdb.com/title/" + x.imdb + "/"));
   if (x.f !== "g") links.append(link("Trailer", "https://www.youtube.com/results?search_query=" + encodeURIComponent(x.title + " Trailer deutsch")));
   c.append(box, ...(x.poster ? [name] : []), m, links);
   return c;
@@ -199,7 +202,7 @@ async function start() {
   CAT = DATA.rec; $("name").textContent = DATA.name; $("catalog").href = DATA.url; document.title = DATA.name;
   const used = new Set(DATA.items.flatMap(x => x.genres || []));
   for (const g of Object.keys(GENRES)) if (used.has(g)) $("genre").add(new Option(GENRES[g], g));
-  if (!DATA.items.some(x => x.rating)) $("sort").value = "new";
+  if (!DATA.items.some(trusted)) $("sort").value = "new";
   $("lead").textContent = "Tippe auf einen Titel, um ihn im Katalog der Bücherei zu öffnen.";
   $("stand").textContent = "Bestand und Verfügbarkeit vom " + new Date(DATA.finished).toLocaleString("de-DE") + ". Vor dem Weg zur Bücherei im Katalog prüfen.";
   render();
