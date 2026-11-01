@@ -1,15 +1,12 @@
 <!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Library Shelves</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
 /* Layout: ein Regal aus Hüllen. Links das Cover, unten die Signatur wie auf einem Bibliotheksetikett. */
 :root {
   --bg: #e6ecec; --panel: #f6f9f8; --ink: #14303c; --muted: #4d6670; --line: #bccaca;
   --accent: #0b6e69; --accent-ink: #ffffff; --stamp: #b3261e; --spine: #cfdbda;
-  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
-  --body: "Atkinson Hyperlegible", system-ui, sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --display: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: ui-monospace, Menlo, Consolas, monospace;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #0f2028; --panel: #17303a; --ink: #e8f1f0; --muted: #a2b8bd; --line: #2d4a55;
@@ -36,12 +33,16 @@ h1 { font: 800 clamp(2.3rem, 7vw, 4.6rem)/1 var(--display); margin: 0; letter-sp
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .count { color: var(--muted); font: 500 .85rem var(--mono); }
 .shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 22px 16px; }
-.card { display: grid; grid-template-rows: auto 1fr; gap: 8px; min-width: 0; color: inherit; text-decoration: none; position: relative; }
-.cover { aspect-ratio: 2/3; max-width: 100%; background: var(--spine); border-radius: 3px; overflow: hidden; position: relative;
-  display: flex; align-items: flex-end; padding: 12px; }
+.card { display: grid; align-content: start; gap: 6px; min-width: 0; }
+.wrapcover { position: relative; }
+.cover { aspect-ratio: 2/3; max-width: 100%; color: inherit; text-decoration: none; background: var(--spine); border-radius: 3px; overflow: hidden; position: relative;
+  display: flex; align-items: flex-start; padding: 12px 12px 36px; }
 .cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .cover b { font: 800 1.15rem/1.12 var(--display); overflow-wrap: anywhere; }
-a.card:hover .cover { outline: 2px solid var(--accent); }
+.cover:hover { outline: 2px solid var(--accent); }
+.rate { position: absolute; left: 8px; bottom: 8px; padding: 1px 6px; border-radius: 3px; background: var(--accent); color: var(--accent-ink); font: 700 .82rem var(--body); }
+.links { display: flex; gap: 12px; font-size: .85rem; }
+.links a { color: var(--accent); }
 .stamp { position: absolute; top: 12px; left: 8px; transform: rotate(-7deg); padding: 2px 7px; font: 500 .72rem var(--mono);
   letter-spacing: .08em; color: var(--stamp); background: var(--panel); border: 2px solid var(--stamp); border-radius: 3px; z-index: 1; }
 .fav { position: absolute; top: 6px; right: 6px; width: 34px; height: 34px; border: 0; border-radius: 3px; background: var(--panel);
@@ -72,18 +73,21 @@ footer a { color: var(--accent); }
   <div class="bar">
     <input type="search" id="q" placeholder="Titel oder Reihe suchen" aria-label="Titel oder Reihe suchen">
     <select id="sort" aria-label="Sortierung">
+      <option value="top">Beste Bewertung</option>
       <option value="new">Zuletzt angeschafft</option>
       <option value="az">A bis Z</option>
       <option value="yd">Neuestes Jahr</option>
       <option value="ya">Ältestes Jahr</option>
     </select>
+    <select id="genre" aria-label="Genre"><option value="">Alle Genres</option></select>
     <label><input type="checkbox" id="only"> Nur verfügbar</label>
   </div>
   <div class="count" id="count" aria-live="polite"></div>
   <main class="shelf" id="shelf"></main>
   <button class="more" id="more" hidden>Mehr anzeigen</button>
   <footer>
-        <div><h2>Stand der Daten</h2><p id="stand"></p><p><a id="catalog" href="#">Zum Katalog der Bücherei</a></p><p>Freies Projekt, kein Angebot der Bücherei. <a href="https://github.com/nikpottbecker/library-shelves">Deine Bücherei ergänzen</a></p></div>
+        <div class="data"><h2>Stand der Daten</h2><p id="stand"></p><p><a id="catalog" href="#">Zum Katalog der Bücherei</a></p><p>Freies Projekt, kein Angebot der Bücherei. <a href="https://github.com/nikpottbecker/library-shelves">Deine Bücherei ergänzen</a></p></div>
+    <div><h2>Rechtliches</h2><p><a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a></p><p>Information courtesy of IMDb (https://www.imdb.com). Used with permission.</p></div>
   </footer>
 </div>
 <script>
@@ -91,6 +95,7 @@ const lib = new URLSearchParams(location.search).get("lib");
 let DATA, CAT = "";
 const TABS = [["d", "DVD"], ["b", "Blu-ray"], ["g", "Spiele"], ["fav", "Merkliste"]];
 const PAGE = 60;
+const GENRES = { Action: "Action", Adventure: "Abenteuer", Animation: "Animation", Biography: "Biografie", Comedy: "Komödie", Crime: "Krimi", Documentary: "Doku", Drama: "Drama", Family: "Familie", Fantasy: "Fantasy", History: "Historie", Horror: "Horror", Music: "Musik", Musical: "Musical", Mystery: "Mystery", Romance: "Liebesfilm", "Sci-Fi": "Science-Fiction", Sport: "Sport", Thriller: "Thriller", War: "Krieg", Western: "Western" };
 const $ = id => document.getElementById(id);
 const key = "fav:" + (lib || "");
 const store = {
@@ -100,10 +105,11 @@ const store = {
 let favs = store.get(), tab = "d", shown = PAGE;
 
 function list() {
-  const q = $("q").value.trim().toLowerCase(), only = $("only").checked, s = $("sort").value;
+  const q = $("q").value.trim().toLowerCase(), only = $("only").checked, s = $("sort").value, genre = $("genre").value;
   const r = DATA.items.filter(x => (tab === "fav" ? favs.has(x.id) : x.f === tab)
-    && (!only || x.avail) && (!q || (x.title + " " + (x.sub || "")).toLowerCase().includes(q)));
+    && (!genre || x.genres?.includes(genre)) && (!only || x.avail) && (!q || (x.title + " " + (x.sub || "")).toLowerCase().includes(q)));
   const by = {
+    top: (a, b) => (b.rating || 0) - (a.rating || 0) || (b.votes || 0) - (a.votes || 0),
     new: (a, b) => b.id.localeCompare(a.id),
     az: (a, b) => a.title.localeCompare(b.title, "de"),
     yd: (a, b) => (b.disc || 0) - (a.disc || 0),
@@ -111,25 +117,29 @@ function list() {
   };
   return r.sort(by[s]);
 }
-function card(x) {
+function link(text, href) {
   const a = document.createElement("a");
-  a.className = "card"; a.href = CAT.replace("{id}", encodeURIComponent(x.id)); a.target = "_blank"; a.rel = "noopener";
-  const cover = document.createElement("div"); cover.className = "cover";
-  if (x.img) { const i = document.createElement("img"); i.src = x.img; i.alt = ""; i.loading = "lazy"; cover.append(i); }
-  else { const b = document.createElement("b"); b.textContent = x.title; cover.append(b); }
+  a.textContent = text; a.href = href; a.target = "_blank"; a.rel = "noopener";
+  return a;
+}
+function card(x) {
+  const c = document.createElement("article"); c.className = "card";
+  const cover = link("", CAT.replace("{id}", encodeURIComponent(x.id))); cover.className = "cover";
+  const b = document.createElement("b"); b.textContent = x.title; cover.append(b);
+  if (x.rating) { const r = document.createElement("span"); r.className = "rate"; r.textContent = "★ " + x.rating.toFixed(1).replace(".", ","); cover.append(r); }
   if (!x.avail) { const s = document.createElement("span"); s.className = "stamp"; s.textContent = "ENTLIEHEN"; cover.append(s); }
   const f = document.createElement("button");
   f.className = "fav"; f.textContent = "♥"; f.setAttribute("aria-pressed", favs.has(x.id));
   f.setAttribute("aria-label", x.title + " auf die Merkliste");
-  f.onclick = e => { e.preventDefault(); favs.has(x.id) ? favs.delete(x.id) : favs.add(x.id); store.set(favs); render(); };
-  cover.append(f);
-  const info = document.createElement("div");
-  const t = document.createElement("div"); t.className = "t"; t.textContent = x.title;
-  const m = document.createElement("div"); m.className = "m"; m.textContent = [x.disc, x.sub].filter(Boolean).join(" · ");
-  const sig = document.createElement("div"); sig.className = "sig"; sig.textContent = "Nr. " + x.id;
-  info.append(t, m, sig); if (x.text) a.title = x.text;
-  a.append(cover, info);
-  return a;
+  f.onclick = () => { favs.has(x.id) ? favs.delete(x.id) : favs.add(x.id); store.set(favs); render(); };
+  const box = document.createElement("div"); box.className = "wrapcover"; box.append(cover, f);
+  const m = document.createElement("div"); m.className = "m";
+  m.textContent = [x.year || x.disc, x.plat, ...(x.genres || []).slice(0, 2).map(g => GENRES[g] || g)].filter(Boolean).join(" · ");
+  const links = document.createElement("div"); links.className = "links";
+  if (x.imdb) links.append(link("IMDb", "https://www.imdb.com/title/" + x.imdb + "/"));
+  if (x.f !== "g") links.append(link("Trailer", "https://www.youtube.com/results?search_query=" + encodeURIComponent(x.title + " Trailer deutsch")));
+  c.append(box, m, links);
+  return c;
 }
 function render() {
   const r = list();
@@ -147,13 +157,13 @@ function render() {
   $("more").hidden = shown >= r.length;
 }
 $("more").onclick = () => { shown += PAGE; render(); };
-["q", "sort", "only"].forEach(i => $(i).addEventListener("input", () => { if (DATA) { shown = PAGE; render(); } }));
+["q", "sort", "genre", "only"].forEach(i => $(i).addEventListener("input", () => { if (DATA) { shown = PAGE; render(); } }));
 async function start() {
   if (!lib) {
     const all = await (await fetch("shelves/index.json")).json();
     const titles = all.reduce((n, l) => n + l.total, 0);
     $("lead").textContent = `${titles.toLocaleString("de-DE")} Filme und Spiele aus ${all.length} Büchereien. Wähle deine Bücherei.`;
-    document.querySelectorAll("#tabs,#sort,label,#count,footer").forEach(e => e.hidden = true);
+    document.querySelectorAll("#tabs,#sort,#genre,label,#count,.data").forEach(e => e.hidden = true);
     $("q").placeholder = "Bücherei oder Ort suchen"; $("q").setAttribute("aria-label", "Bücherei oder Ort suchen");
     $("shelf").className = "libs";
     const show = () => {
@@ -170,6 +180,9 @@ async function start() {
   }
   DATA = await (await fetch(`shelves/${encodeURIComponent(lib)}.json`)).json();
   CAT = DATA.rec; $("name").textContent = DATA.name; $("catalog").href = DATA.url; document.title = DATA.name;
+  const used = new Set(DATA.items.flatMap(x => x.genres || []));
+  for (const g of Object.keys(GENRES)) if (used.has(g)) $("genre").add(new Option(GENRES[g], g));
+  if (!DATA.items.some(x => x.rating)) $("sort").value = "new";
   $("lead").textContent = "Tippe auf einen Titel, um ihn im Katalog der Bücherei zu öffnen.";
   $("stand").textContent = "Bestand und Verfügbarkeit vom " + new Date(DATA.finished).toLocaleString("de-DE") + ". Vor dem Weg zur Bücherei im Katalog prüfen.";
   render();

@@ -12,6 +12,8 @@ Filme und Spiele öffentlicher Büchereien auf einem durchsuchbaren Regal, inspi
 
 Fällt eine Bücherei aus, bleibt ihr letzter Stand online.
 
+Bewertungen und Genres stammen aus den [nicht kommerziellen IMDb-Datensätzen](https://developer.imdb.com/non-commercial-datasets/). Information courtesy of IMDb (https://www.imdb.com). Used with permission.
+
 ## Mitmachen
 
 - **Nur Bücherei melden:** [Issue öffnen](https://github.com/nikpottbecker/library-shelves/issues/new?template=library.yml).
