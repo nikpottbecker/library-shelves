@@ -1,0 +1,29 @@
+name: Update shelves
+on:
+  schedule:
+    - cron: "17 3 */3 * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["libraries.json", "readers/**", "site/**", "tools/crawl.mjs"]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node tools/crawl.mjs
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - uses: actions/deploy-pages@v4
