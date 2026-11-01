@@ -52,7 +52,9 @@ export function best(x, names, films) {
   if (!fits.length) return null;
   fits.sort((a, b) => b.score - a.score || b.film.votes - a.film.votes || a.film.id.localeCompare(b.film.id));
   const winner = fits[0];
-  const ambiguous = fits.filter(f => f.direct && f.film.votes >= 100).length > 1;
+  const directFits = fits.filter(f => f.direct);
+  const ambiguous = directFits.filter(f => f.film.votes >= 100).length > 1
+    || (full.split(" ").length === 1 && directFits.length > 1);
   const part = /\b(staffel|season|teil\s*(?:\d+|[ivx]+)|part\s*(?:\d+|[ivx]+)|folge\s*\d+|episode\s*\d+)\b/i.test(x.title + " " + (x.sub || ""));
   const high = winner.direct && !ambiguous && !part && winner.film.votes >= 1000
     && winner.film.year > 0 && (!disc || winner.gap <= 20);
