@@ -16,6 +16,8 @@ Bücherei-Kataloge sind zum Suchen gebaut, nicht zum Stöbern. Hier siehst du de
 - Filter nach Genre und „nur verfügbar“
 - Bewertungen von IMDb und Poster von TMDB
 - Merkliste, die nur in deinem Browser liegt
+- Empfehlungen aus deinem Netflix- oder Prime-Video-Verlauf, ausgewertet nur im Browser
+- Offene JSON-Daten und [`llms.txt`](https://nikpottbecker.github.io/library-shelves/llms.txt) für KI-Agenten
 - Direkter Link zum Titel im Katalog der Bücherei
 
 ## Dabei sind
@@ -31,7 +33,8 @@ Deine Stadt fehlt? [Schlag sie vor](https://github.com/nikpottbecker/library-she
 | Eine Bücherei melden | [Issue öffnen](https://github.com/nikpottbecker/library-shelves/issues/new?template=library.yml) |
 | Eine Bücherei eintragen | `node tools/detect.mjs <Katalog-Link>` ausführen und die Zeile in `libraries.json` ergänzen |
 | Ein neues Katalogsystem anbinden | Reader schreiben, siehe [CONTRIBUTING.md](CONTRIBUTING.md) |
-| Einen Coding-Agenten einsetzen | [AGENTS.md](AGENTS.md) zeigen |
+| Einen Coding-Agenten einsetzen | [Fertigen Prompt kopieren](prompts/add-library.md) |
+| Empfehlungen von deinem KI-Agenten | [Fertigen Prompt kopieren](prompts/recommend.md) |
 
 Unterstützt wird bisher OCLC OPEN (BIBLIOTHECA OPEN). Reader für BIBDIA, LITTERA, aDIS und andere Systeme sind willkommen.
 

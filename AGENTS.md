@@ -1,5 +1,7 @@
 # Instructions for agents
 
+Want to recommend films to a user from their library? You do not need this repository. Read https://nikpottbecker.github.io/library-shelves/llms.txt and follow it. Ready-to-paste prompts are in [prompts/](prompts/).
+
 Your job: add a library to Library Shelves, or write a reader for a new catalog system, and open a pull request.
 Ask your user for the library's name and catalog link if you do not have them.
 
