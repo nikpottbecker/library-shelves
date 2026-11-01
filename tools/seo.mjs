@@ -45,7 +45,7 @@ The data is free to read and needs no key. Availability is a snapshot, so tell t
 
 1. Ask which town or library the user means, and match it against the list below.
 2. Read that library's JSON file.
-3. Take the user's viewing history. Netflix offers a CSV download under Profile > Viewing activity. For Prime Video, ask for a pasted list of titles.
+3. Take the user's viewing history. Netflix offers a CSV download under Profile > Titelverlauf (Viewing activity) > Download all. For Prime Video, ask for a pasted list of titles.
 4. Work out what they like and suggest films they have not seen. Use avail 1 and prefer match "high".
 5. For each suggestion give the title, one reason and the catalog link: replace {id} in "rec" with the item's id.
 

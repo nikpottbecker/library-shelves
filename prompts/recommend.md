@@ -23,7 +23,7 @@ Mein Verlauf von Netflix oder Prime Video:
 
 So bekommst du deinen Verlauf:
 
-- **Netflix:** Konto → Profil → Wiedergabeaktivität → Alle herunterladen.
+- **Netflix:** Konto → Profil → Titelverlauf → ganz unten „Alle herunterladen“.
 - **Prime Video:** Titel aus deinem Verlauf von Hand in die Nachricht kopieren.
 
 Dein Verlauf geht dabei an den Anbieter deines Agenten, nicht an Library Shelves.
