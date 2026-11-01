@@ -20,7 +20,7 @@ concurrency:
 jobs:
   crawl:
     runs-on: ubuntu-latest
-    timeout-minutes: 300
+    timeout-minutes: 350
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -29,6 +29,8 @@ jobs:
       - run: node tools/crawl.mjs
         env:
           MAX_PAGES: ${{ inputs.max_pages }}
+          CHECK_MINUTES: 180
+          MAX_MINUTES: 230
       - run: node --max-old-space-size=6000 tools/enrich.mjs
       - run: node tools/posters.mjs
         env:

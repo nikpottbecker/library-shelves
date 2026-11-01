@@ -143,7 +143,7 @@ function card(x) {
     cover.append(i);
   }
   if (x.rating) { const r = document.createElement("span"); r.className = "rate"; r.textContent = "★ " + x.rating.toFixed(1).replace(".", ","); cover.append(r); }
-  if (!x.avail) { const s = document.createElement("span"); s.className = "stamp"; s.textContent = "ENTLIEHEN"; cover.append(s); }
+  if (x.avail === 0) { const s = document.createElement("span"); s.className = "stamp"; s.textContent = "ENTLIEHEN"; cover.append(s); }
   const f = document.createElement("button");
   f.className = "fav"; f.textContent = "♥"; f.setAttribute("aria-pressed", favs.has(x.id));
   f.setAttribute("aria-label", x.title + " auf die Merkliste");

@@ -34,6 +34,8 @@ The fields match the reader format of Nomad Library's public data repository, so
 
 Try it with `node tools/try.mjs <system> <catalog-url>`.
 
+`avail` is `1`, `0`, or `null` when unknown. Skip costly per-title checks once `ctx.skipChecks()` is true.
+
 ## Rules
 
 - Use only `ctx.fetch`. It keeps requests to one per second.

@@ -20,7 +20,7 @@ Bücherei-Kataloge sind zum Suchen gebaut, nicht zum Stöbern. Hier siehst du de
 
 ## Dabei sind
 
-Bad Dürkheim · Celle · Geldern · Gescher · Hachenburg · Heidelberg · Lahnstein · Lehrte · Münster (Liebfrauen-Überwasser) · Oranienburg · Remscheid · Rendsburg · Rüsselsheim · Wiesbaden · Wittenberg
+Bad Dürkheim · Celle · Frankfurt · Geldern · Gescher · Hachenburg · Heidelberg · Lahnstein · Lehrte · Mainz · Mannheim · Münster · Oranienburg · Remscheid · Rendsburg · Rüsselsheim · Wiesbaden · Wittenberg
 
 Deine Stadt fehlt? [Schlag sie vor](https://github.com/nikpottbecker/library-shelves/issues/new?template=library.yml).
 

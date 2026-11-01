@@ -4,7 +4,7 @@ export const system = "oclcopen";
 const PAGE = 50; // largest size in the catalog's own page size menu
 const VIDEO = /dvd|blu-?ray|\bbrd\b|film/i;
 const GAME = /konsol|videospiel|video game|nintendo|playstation|\bps[2-5]\b|xbox|\bwii\b|switch/i;
-const SKIP = /^e(video|audio|book|music|paper|film)|filmfriend|hörbuch|hoerbuch/i;
+const SKIP = /^e(video|audio|book|music|paper|film)|filmfriend|hörbuch|hoerbuch|-rom\b|dvdroms?\b/i;
 const PLATFORM = /(switch|wii u|wii|n?3ds|nds|nintendods|ps[2-5]|playstation\s?[2-5]|xbox[\w ]*)/i;
 
 // A media group name -> "b", "d", "g", or "" when it holds no discs or console games. Names differ per library.
@@ -124,7 +124,7 @@ export async function page(lib, task, n, ctx) {
     const f = task.f === "d" && /blu-?ray/i.test(x.title) ? "b" : task.f;
     rows.push({
       id: x.id, title: x.title, sub: series && part ? `${series} ${part}` : "", f, disc: x.disc, cover: "",
-      avail: await available(lib, ctx, x.id, portalId), holds: 0, subj: "",
+      avail: ctx.skipChecks?.() ? null : await available(lib, ctx, x.id, portalId), holds: 0, subj: "",
       plat: f === "g" ? (task.group.match(PLATFORM) || x.title.match(PLATFORM) || [""])[0] : "",
     });
   }

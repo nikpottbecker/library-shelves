@@ -11,8 +11,10 @@ OCLC OPEN "OPAC Portal" on DotNetNuke.
 - The form path differs per library: `/Mediensuche/Erweiterte-Suche`, `/Erweiterte-Suche` or `/Suche/…`.
 - Availability differs per version: `d.IsAvail` or `d.Avail.Available`.
 
+- Very large libraries: after `CHECK_MINUTES`, rows carry `avail: null` (unknown), because each check costs one request.
+
 ## Tested (1 Nov 2026)
 
-Plan plus first page worked for Bad Dürkheim, Celle, Geldern, Gescher, Hachenburg, Heidelberg, Lahnstein, Lehrte, Münster Überwasser, Oranienburg, Remscheid, Rendsburg, Rüsselsheim, Wiesbaden and Wittenberg.
+Plan plus first page worked for Bad Dürkheim, Celle, Geldern, Gescher, Hachenburg, Heidelberg, Lahnstein, Lehrte, Münster Überwasser, Oranienburg, Remscheid, Rendsburg, Frankfurt, Mainz, Mannheim, Münster, Rüsselsheim, Wiesbaden and Wittenberg.
 
 Essen fails: its advanced search has no media group menu at the three known paths.

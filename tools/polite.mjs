@@ -1,10 +1,14 @@
 // The only network path readers get: one request per second, retries on temporary errors.
 const UA = "library-shelves (+https://github.com/nikpottbecker/library-shelves)";
 
+// After CHECK_MINUTES, readers skip per-title checks so a very large library still finishes.
+const CHECKS_END = Date.now() + +(process.env.CHECK_MINUTES || 1e6) * 6e4;
+
 export function politeCtx() {
   let next = 0, requests = 0;
   return {
     log: console.error,
+    skipChecks: () => Date.now() > CHECKS_END,
     get requests() { return requests; },
     async fetch(url, init = {}) {
       for (let attempt = 0; ; attempt++) {
