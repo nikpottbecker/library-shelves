@@ -12,7 +12,7 @@ Filme und Spiele öffentlicher Büchereien auf einem durchsuchbaren Regal, inspi
 
 Fällt eine Bücherei aus, bleibt ihr letzter Stand online.
 
-Bewertungen und Genres stammen aus den [nicht kommerziellen IMDb-Datensätzen](https://developer.imdb.com/non-commercial-datasets/). Information courtesy of IMDb (https://www.imdb.com). Used with permission.
+Bewertungen und Genres stammen aus den [nicht kommerziellen IMDb-Datensätzen](https://developer.imdb.com/non-commercial-datasets/). Information courtesy of IMDb (https://www.imdb.com). Used with permission. Poster von [TMDB](https://www.themoviedb.org). This product uses the TMDB API but is not endorsed or certified by TMDB.
 
 ## Mitmachen
 

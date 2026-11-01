@@ -61,6 +61,6 @@ Do not work around any of these. Do not run several copies of a crawl to read fa
 
 - Change `site/impressum.html` or `site/datenschutz.html`. The site owner handles those.
 - Add tracking, cookies, or scripts, fonts or images from other hosts.
-- Store data about borrowers or copy cover images into the repository.
+- Store data about borrowers or commit poster images to the repository.
 - Commit `dist/`.
 - Add co-author lines or tool credits to commits and pull requests.

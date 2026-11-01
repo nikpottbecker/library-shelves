@@ -30,6 +30,9 @@ jobs:
         env:
           MAX_PAGES: ${{ inputs.max_pages }}
       - run: node --max-old-space-size=6000 tools/enrich.mjs
+      - run: node tools/posters.mjs
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
