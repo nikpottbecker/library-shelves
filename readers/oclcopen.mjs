@@ -122,6 +122,7 @@ export async function page(lib, task, n, ctx) {
   for (const x of parse(html)) {
     const [series, part] = x.series.split(/;\s*/);
     const f = task.f === "d" && /blu-?ray/i.test(x.title) ? "b" : task.f;
+    x.title = x.title.replace(/\s*\[(?:blu-?ray|dvd)[^\]]*\]/gi, "").trim() || x.title;
     rows.push({
       id: x.id, title: x.title, sub: series && part ? `${series} ${part}` : "", f, disc: x.disc, cover: "",
       avail: ctx.skipChecks?.() ? null : await available(lib, ctx, x.id, portalId), holds: 0, subj: "",

@@ -14,9 +14,14 @@ const TYPES = new Set(["movie", "tvMovie", "tvSeries", "tvMiniSeries", "video"])
 export const norm = s => s.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/ß/g, "ss").replace(/&/g, " und ").replace(/[^a-z0-9]+/g, " ").trim();
 export const short = s => s.split(/\s+[-–:]\s+|:\s/)[0];
 
+const SEASON = /\s*[-–:,]\s*(?:die\s+)?(?:komplette\s+)?(?:\S+\s+)?(?:staffel|season|serie|series)\b.*$/i;
+// The searchable part of a catalog title: no "[Blu-ray]" note, no season or box set suffix.
+export const core = t => t.replace(/\s*\[[^\]]*\]\s*/g, " ").replace(SEASON, "").replace(/\s*[-–]\s*(?:dvd|vol\.?|volume)\s*\d.*$/i, "").trim() || t;
+export const isSeason = t => SEASON.test(t);
+
 export function titleKeys(items) {
   const names = new Map();
-  for (const x of items) for (const t of [x.title, short(x.title)]) {
+  for (const x of items) for (const t of [x.title, core(x.title), short(core(x.title))]) {
     const n = norm(t);
     if (n && !names.has(n)) names.set(n, new Map());
   }
@@ -32,8 +37,9 @@ export function addTitle(names, id, title, source) {
 }
 
 export function best(x, names, films) {
-  const full = norm(x.title);
-  const cut = norm(short(x.title));
+  const title = core(x.title);
+  const full = norm(title);
+  const cut = norm(short(title));
   const disc = Number(x.disc) || 0;
   const find = (key, fallback) => [...(names.get(key) || [])].flatMap(([id, sources]) => {
     const film = films.get(id);
@@ -56,7 +62,8 @@ export function best(x, names, films) {
   // A same-named title only makes a match doubtful if it is a real rival: released near the disc, or not far behind in votes.
   const rivals = fits.filter(f => f !== winner && f.direct && f.film.votes >= 100 && (!closeYear(winner) || closeYear(f)));
   const ambiguous = rivals.some(f => f.film.votes * 5 > winner.film.votes);
-  const part = /\b(staffel|season|teil\s*(?:\d+|[ivx]+)|part\s*(?:\d+|[ivx]+)|folge\s*\d+|episode\s*\d+)\b/i.test(x.title + " " + (x.sub || ""));
+  const season = isSeason(x.title) && /^tv/.test(winner.film.type || "");
+  const part = !season && /\b(staffel|season|teil\s*(?:\d+|[ivx]+)|part\s*(?:\d+|[ivx]+)|folge\s*\d+|episode\s*\d+)\b/i.test(x.title + " " + (x.sub || ""));
   const high = winner.direct && !ambiguous && !part && winner.film.votes >= (closeYear(winner) ? 100 : 1000)
     && winner.film.year > 0 && (!disc || winner.gap <= 20);
   return { film: winner.film, match: high ? "high" : "low" };

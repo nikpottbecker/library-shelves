@@ -114,3 +114,21 @@ test("unrated candidates cannot become confident matches", () => {
     { id: "ttZero", title: "Ein Film", year: 2019, votes: 0 }
   ]), null);
 });
+
+test("catalog notes and season suffixes are not part of the title", async () => {
+  const { core, isSeason } = await import("../tools/enrich.mjs");
+  assert.equal(core("Heist [Blu-Ray]"), "Heist");
+  assert.equal(core("Yellowstone - Staffel 5"), "Yellowstone");
+  assert.equal(core("Die Dornenvögel - die komplette Serie"), "Die Dornenvögel");
+  assert.equal(core("NCIS - Die fünfte Season"), "NCIS");
+  assert.equal(core("Astrid Lindgrens Karlsson vom Dach - DVD 4"), "Astrid Lindgrens Karlsson vom Dach");
+  assert.ok(isSeason("Yellowstone - Staffel 5"));
+  assert.ok(!isSeason("Heist"));
+});
+test("a season disc can match its series with high confidence", () => {
+  const result = fixture({ title: "Yellowstone - Staffel 5", disc: 2025 }, [
+    { id: "ttY", title: "Yellowstone", type: "tvSeries", year: 2018, votes: 300000 }
+  ]);
+  assert.equal(result?.film.id, "ttY");
+  assert.equal(result?.match, "high");
+});
