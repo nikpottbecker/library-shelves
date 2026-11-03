@@ -78,6 +78,7 @@ footer { border-top: 1px solid var(--line); padding-top: 18px; display: grid; ga
 footer h2 { font: 800 1.05rem var(--display); color: var(--ink); margin: 0 0 4px; }
 footer p { margin: 0; }
 footer a { color: var(--accent); }
+.linkbtn { font: inherit; color: var(--accent); background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; }
 .hours { display: grid; grid-template-columns: auto 1fr; gap: 0 12px; margin: 0; }
 .hours dd { margin: 0; font-variant-numeric: tabular-nums; }
 </style></head><body>
@@ -120,10 +121,13 @@ footer a { color: var(--accent); }
   <button class="more" id="more" hidden>Mehr anzeigen</button>
   <footer>
         <div class="data"><h2>Stand der Daten</h2><p id="stand"></p><p><a id="catalog" href="#">Zum Katalog der Bücherei</a></p><p>Freies Projekt, kein Angebot der Bücherei. <a href="https://github.com/nikpottbecker/library-shelves#mitmachen">Deine Bücherei ergänzen</a></p></div>
+    <div id="account" hidden></div>
     <div><h2>Rechtliches</h2><p><a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a></p><p>Information courtesy of IMDb (https://www.imdb.com). Used with permission. This product uses the TMDB API but is not endorsed or certified by TMDB.</p></div>
   </footer>
 </div>
+<script>window.ACCOUNT_API = "";</script>
 <script src="recommend.js"></script>
+<script src="account.js"></script>
 <script>
 const lib = window.LIB || new URLSearchParams(location.search).get("lib");
 let DATA, CAT = "";
@@ -137,7 +141,7 @@ const $ = id => document.getElementById(id);
 const key = "fav:" + (lib || "");
 const store = {
   get() { try { return new Set(JSON.parse(localStorage.getItem(key) || "[]")); } catch { return new Set(); } },
-  set(s) { try { localStorage.setItem(key, JSON.stringify([...s])); } catch {} }
+  set(s) { try { localStorage.setItem(key, JSON.stringify([...s])); } catch {} window.Account?.changed(); }
 };
 let favs = store.get(), tab = "d", shown = PAGE;
 
@@ -222,6 +226,7 @@ $("rec-copy").onclick = async e => {
   try { await navigator.clipboard.writeText($("rec-prompt").value); e.target.textContent = "Kopiert"; }
   catch { $("rec-prompt").select(); }
 };
+window.onAccountData = () => { favs = store.get(); if (DATA) render(); };
 $("more").onclick = () => { shown += PAGE; render(); };
 ["q", "sort", "genre", "only"].forEach(i => $(i).addEventListener("input", () => { if (DATA) { shown = PAGE; render(); } }));
 async function start() {

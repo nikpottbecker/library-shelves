@@ -15,7 +15,7 @@ Bücherei-Kataloge sind zum Suchen gebaut, nicht zum Stöbern. Hier siehst du de
 - Suche nach Titel oder Reihe
 - Filter nach Genre und „nur verfügbar“
 - Bewertungen von IMDb und Poster von TMDB
-- Merkliste, die nur in deinem Browser liegt
+- Merkliste im Browser, auf Wunsch mit Passkey-Konto auf allen Geräten, ohne E-Mail und ohne Passwort
 - Empfehlungen aus deinem Netflix- oder Prime-Video-Verlauf, ausgewertet nur im Browser
 - Offene JSON-Daten und [`llms.txt`](https://nikpottbecker.github.io/library-shelves/llms.txt) für KI-Agenten
 - Direkter Link zum Titel im Katalog der Bücherei
@@ -45,6 +45,10 @@ Unterstützt wird bisher OCLC OPEN (BIBLIOTHECA OPEN). Reader für BIBDIA, LITTE
 3. GitHub Actions liest sie alle drei Tage mit einer Anfrage pro Sekunde und veröffentlicht das Regal.
 
 Fällt eine Bücherei aus, bleibt ihr letzter Stand online. Verbindlich ist immer der Katalog der Bücherei.
+
+## Konten
+
+`worker/` enthält den kleinen Cloudflare Worker für Passkey-Konten. Er speichert nur eine zufällige ID, den öffentlichen Schlüssel und die Merkliste. Tests: `cd worker && npm ci && npm test`.
 
 ## Inspiration und Daten
 

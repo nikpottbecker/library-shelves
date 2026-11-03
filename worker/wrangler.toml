@@ -1,0 +1,15 @@
+name = "library-shelves-accounts"
+main = "src/index.js"
+compatibility_date = "2025-06-01"
+
+[vars]
+# The site's host name. Passkeys only work on this exact domain, so change it before anyone signs up.
+RP_ID = "nikpottbecker.github.io"
+RP_NAME = "Library Shelves"
+ORIGINS = "https://nikpottbecker.github.io"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "library-shelves-accounts"
+database_id = "REPLACE_AFTER_CREATE"
+migrations_dir = "migrations"
