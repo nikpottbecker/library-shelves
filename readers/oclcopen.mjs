@@ -21,7 +21,7 @@ export function libFromUrl(url) {
   if (!/^https?:$/.test(u.protocol) || !u.hostname.includes(".")) return null;
   const host = u.hostname.toLowerCase();
   const first = u.pathname.split("/").filter(Boolean)[0] || "";
-  const scope = first && !/^(mediensuche|startseite|login|mein-konto|default\.aspx|permalink\.aspx)$/i.test(first) ? first.toLowerCase() : "";
+  const scope = first && !/^(mediensuche|erweiterte-suche|erweitertesuche\.aspx|startseite|login|mein-konto|default\.aspx|permalink\.aspx)$/i.test(first) ? first.toLowerCase() : "";
   return {
     id: "oclcopen." + host.replace(/[^a-z0-9.-]/g, "-") + (scope ? "_" + scope.replace(/[^a-z0-9-]/g, "-") : ""),
     host, base: u.origin + (scope ? "/" + first : ""),
@@ -59,12 +59,31 @@ async function searchHash(lib, ctx, form0, field, group) {
   return { hash, results: new URL(target, form0).pathname };
 }
 
-// The form sits at a different path depending on how the library set up its menu.
+// Prefer the catalog's own advanced-search link. Some portals use .aspx or a locale prefix.
+export function advancedSearchUrls(lib, home = "") {
+  const root = new URL(lib.base.replace(/\/$/, "") + "/");
+  const linked = [...home.matchAll(/<a\b[^>]*\bhref\s*=\s*(["'])(.*?)\1/gi)]
+    .map(m => { try { return new URL(decode(m[2]), root).href; } catch { return ""; } })
+    .filter(url => url.startsWith(root.href) && /Erweiterte-?Suche(?:\.aspx)?/i.test(url));
+  const known = [
+    "/Mediensuche/Erweiterte-Suche",
+    "/Mediensuche/ErweiterteSuche.aspx",
+    "/Erweiterte-Suche",
+    "/Suche/Erweiterte-Suche",
+    "/de-de/Mediensuche/Erweiterte-Suche",
+  ].map(path => lib.base.replace(/\/$/, "") + path);
+  return [...new Set([...linked, ...known])];
+}
+
 async function findForm(lib, ctx) {
-  for (const path of ["/Mediensuche/Erweiterte-Suche", "/Erweiterte-Suche", "/Suche/Erweiterte-Suche"]) {
-    const r = await ctx.fetch(lib.base + path).catch(() => null);
+  const home = await (await ctx.fetch(lib.base + "/")).text();
+  for (const url of advancedSearchUrls(lib, home)) {
+    const r = await ctx.fetch(url).catch(e => {
+      if (/\b(?:403|429)\b/.test(String(e.message))) throw e;
+      return null;
+    });
     const html = r ? await r.text() : "";
-    if (/DdlMediaGroupValue/.test(html)) return { url: lib.base + path, html };
+    if (/DdlMediaGroupValue/.test(html)) return { url, html };
   }
   throw Object.assign(new Error("oclcopen: no advanced search with a media group menu"), { permanent: true });
 }

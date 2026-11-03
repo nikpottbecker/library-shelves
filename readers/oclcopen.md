@@ -18,3 +18,11 @@ OCLC OPEN "OPAC Portal" on DotNetNuke.
 Plan plus first page worked for Bad Dürkheim, Celle, Geldern, Gescher, Hachenburg, Heidelberg, Lahnstein, Lehrte, Münster Überwasser, Oranienburg, Remscheid, Rendsburg, Frankfurt, Mainz, Mannheim, Münster, Rüsselsheim, Wiesbaden and Wittenberg.
 
 Essen fails: its advanced search has no media group menu at the three known paths.
+
+## Additional advanced-search paths observed (1 Nov 2026)
+
+- Frankfurt: `/Mediensuche/ErweiterteSuche.aspx`.
+- Mannheim: `/mannheim/de-de/Mediensuche/Erweiterte-Suche` (language prefix within the scoped portal).
+- Münster: `/Erweiterte-Suche`.
+- The reader now follows same-catalog advanced-search links from each portal's homepage before trying known paths.
+- These URLs were observed on public catalog pages; a live reader run for these cities has not yet been completed.
