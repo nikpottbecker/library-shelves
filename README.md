@@ -3,7 +3,7 @@
 **Filme und Konsolenspiele deutscher Büchereien auf einem Regal.**
 Durchsuche DVDs, Blu-rays und Spiele deiner Stadtbücherei mit Bewertungen, Genres und Verfügbarkeit. Kostenlos, ohne Konto und ohne Tracking.
 
-**[Zur Website](https://nikpottbecker.github.io/library-shelves/)** · [Bücherei vorschlagen](https://github.com/nikpottbecker/library-shelves/issues/new?template=library.yml) · [Mitmachen](#mitmachen)
+**[Zur Website](https://library.nikpottbecker.de/)** · [Bücherei vorschlagen](https://github.com/nikpottbecker/library-shelves/issues/new?template=library.yml) · [Mitmachen](#mitmachen)
 
 [![Check](https://github.com/nikpottbecker/library-shelves/actions/workflows/ci.yml/badge.svg)](https://github.com/nikpottbecker/library-shelves/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -48,7 +48,7 @@ Fällt eine Bücherei aus, bleibt ihr letzter Stand online. Verbindlich ist imme
 
 ## Konten
 
-`worker/` enthält den kleinen Cloudflare Worker für Passkey-Konten. Er speichert nur eine zufällige ID, den öffentlichen Schlüssel und die Merkliste. Tests: `cd worker && npm ci && npm test`.
+`worker/` enthält den kleinen Cloudflare Worker für Passkey-Konten. Er speichert nur eine zufällige ID, den öffentlichen Schlüssel und die Merkliste – keine E-Mail-Adresse, keinen Namen und kein Passwort. Die Website lädt den öffentlichen Endpunkt aus `site/account-config.js`. Vor der Bereitstellung müssen die D1-ID in `worker/wrangler.toml` und der dort konfigurierte Host exakt zur Website passen. Tests: `cd worker && npm ci && npm test`.
 
 ## Inspiration und Daten
 

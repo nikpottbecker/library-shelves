@@ -72,7 +72,14 @@
   function ui() {
     const box = document.getElementById("account");
     if (!box) return;
-    if (!API || !window.PublicKeyCredential) { box.hidden = true; return; }
+    if (!API) { box.hidden = true; return; }
+    box.hidden = false;
+    if (!window.PublicKeyCredential) {
+      const heading = Object.assign(document.createElement("h2"), { textContent: "Konto" });
+      const message = Object.assign(document.createElement("p"), { textContent: "Dieser Browser unterstützt keine Passkeys. Deine lokale Merkliste funktioniert trotzdem." });
+      box.replaceChildren(heading, message);
+      return;
+    }
     const signedIn = !!store.get(TOKEN);
     const msg = document.createElement("p"), row = document.createElement("p");
     msg.setAttribute("aria-live", "polite");

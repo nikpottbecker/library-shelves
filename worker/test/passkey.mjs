@@ -1,5 +1,5 @@
 // A software passkey (ES256) for tests.
-export const ORIGIN = "https://nikpottbecker.github.io", RP = "nikpottbecker.github.io";
+export const ORIGIN = "https://library.nikpottbecker.de", RP = "library.nikpottbecker.de";
 export const b64 = b => Buffer.from(b).toString("base64url");
 export const sha = async d => new Uint8Array(await crypto.subtle.digest("SHA-256", typeof d === "string" ? new TextEncoder().encode(d) : d));
 

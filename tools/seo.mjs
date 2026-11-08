@@ -2,7 +2,7 @@
 // Writes one indexable page per library, plus sitemap.xml and robots.txt.
 import fs from "node:fs";
 
-const SITE = "https://nikpottbecker.github.io/library-shelves/";
+const SITE = "https://library.nikpottbecker.de/";
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const slug = s => s.toLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
